@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        body{
+            /* Default font */
+            font-family: 'Lato', sans-serif;
+            color: #24292F;
+            margin:0;
+            font-weight: 400;
+            font-size: 16px;
+        }
+        
+        #formulario{
+            padding: 5rem 2rem;
+            border-radius: 3px;
+            width: 35%;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            row-gap: 2rem;
+            margin: 4rem auto;
+            border: 1px solid red;
+        }
+
+        .select{
+            position: relative;
+            border: 1px solid #b8bec3;
+            padding: 0.6rem 1rem;
+            border-radius: 5px;
+    
+        }
+
+        .select .selected{
+            display: grid;
+            grid-template-columns: repeat(2, 97% auto);
+        }
+
+        .select .arrow{
+            float: right;
+            font-size: 10px;
+            margin: auto 0;
+        }
+
+        .select .selected:hover{
+            cursor: pointer;
+        }        
+
+        .select .select-options{
+            padding: 0.7rem 0;            
+            border: 1px solid #b8bec3;
+            border-radius: 5px;                
+            margin-top:0.5rem;
+            display: none;
+            position: absolute;
+            background-color: white;
+            top: 100%;
+            left: -1px;
+            right: -1px;
+            z-index: 1;        
+        }
+
+        .select .option{
+            padding: 0.6rem 1rem!important;
+        }
+
+        .select .option{
+            padding: 5px 0px;
+        }
+
+        .select .option:hover{
+            cursor: pointer;
+            color: #1261d6;
+
+        }
+
+
+    </style>
+</head>
+<body>
+    
+
+<div id="formulario">
+<div class="select" id="dropdown1">
+<div class="selected">
+    <div class="value">Selecciona una opción...</div>
+    <div class="arrow">▼</div>
+</div>
+<div class="select-options"></div>
+</div>
+
+<button type="submit">enviar</button>
+</form>
+
+<script>
+const formulario = document.querySelector('#formulario')
+
+
+// Select dropdown
+
+const selectDropdown = function(id, inputName, optionsArray){
+
+const selectdropdown = formulario.querySelector(`#${id}`)
+const selectoptions = selectdropdown.querySelector('.select-options')
+
+selectdropdown.addEventListener('click', function(){
+    if (selectoptions.style.display === 'block'){
+        selectoptions.style.display = 'none'
+    }
+    else {
+        selectoptions.style.display = 'block'
+    }
+})
+
+document.addEventListener('click', function(event){
+    if(!event.target.closest(`#${id}`)){
+        selectoptions.style.display = 'none'
+    }
+},
+false
+)
+
+const selectedoption = selectdropdown.querySelector('.selected')
+
+const input = document.createElement('input')
+input.setAttribute('type', 'hidden')
+input.setAttribute('name', inputName)
+selectedoption.appendChild(input)
+
+optionsArray.forEach(function(item){
+    selectoptions.innerHTML += `<div class="option" data-value="${item.id}">${item.name}</div>`
+
+    const options = selectdropdown.querySelectorAll('.option')
+
+        options.forEach(function(option){
+            option.addEventListener('click', function(item){
+                const text = item.target.textContent
+                const value = item.target.getAttribute('data-value')
+                selectedoption.querySelector('.value').innerHTML = text
+                selectedoption.querySelector(`input[name="${inputName}"]`).setAttribute('value', value)
+    })
+})
+})
+}
+
+
+const optionsArray1 = [
+    {"id": 1, "name": "Boadilla del Monte"},
+    {"id": 2, "name": "Las Rozas de Madrid"},
+    {"id": 3, "name": "Pozuelo de Alarcón"},
+    {"id": 4, "name": "Villaviciosa de Odón"},            
+]
+
+const optionsArray2 = [
+    {"id": 1, "name": "Pikachu"},
+    {"id": 2, "name": "Bulbasur"},
+    {"id": 3, "name": "Charmander"},   
+]
+
+selectDropdown('dropdown1', 'municipios', optionsArray1)
+
+selectDropdown('dropdown2', 'pokemons', optionsArray2)
+
+
+// Select dropdown
+
+formulario.addEventListener('submit', function(event){
+    event.preventDefault()
+    console.log(formulario.querySelector('#nombre').value)
+    console.log(formulario.querySelector('#apellidos').value)
+})
+
+
+</script>
+
+</body>
+</html>
